@@ -7,11 +7,11 @@
 # 1 数据转换过程
 
 \- csv 
-→ 点shp 
-→ tin数据集 
-→ 三角形面shp 
-→ 筛选范围后的三角形面shp 
-→ 二进制化成bin文件并gzip压缩
+→ 点shp (步骤1)
+→ tin数据集 (步骤2)
+→ 三角形面shp (步骤3) 
+→ 筛选范围后的三角形面shp (步骤4)
+→ 二进制化成bin文件并gzip压缩 (步骤5)
 
 ## 注意事项
 
@@ -40,6 +40,13 @@ ArcMap 内置的 arcpy
 - `is_clean_temp`?: 布尔值，是否删除中间步骤文件，默认删除；有可能会被 arcpy 占用一部分文件，需要程序运行结束后手动删除
 - `csv_filter`?: csv 数据文件后缀名，默认 '*.csv'
 - `open_onend`?: 布尔值，指示运行结束后是否打开结果文件夹，默认不打开
+- `skip`?: 数字 list，指示需要跳过计算的步骤，例如要跳过 1、2、3 步，只需传递 `[1, 2, 3]` 即可，默认不跳过，即 `None`；跳步请注意中间步骤所需数据的完整性、对应中间步骤的文件存在
+步骤1~5会在 `result_dir` 生成如下命名的文件夹：
+  - 步骤1: `to_ptshp`
+  - 步骤2: `tins`
+  - 步骤3: `triangles_shp`
+  - 步骤4: `filtered_triangles`
+  - 步骤5: `finally_result`
 
 ``` py
 from csv2tribin import run
