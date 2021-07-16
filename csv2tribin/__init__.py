@@ -67,7 +67,7 @@ def run(csv_dir, coverage_layer_shppath, result_dir = None, is_clean_temp = True
     cost = "{}min.".format(cost / 60)
   elif cost > 3600:
     cost = "{}hour.".format(cost / 3600)
-  elif
+  else:
     cost = "{}sec.".format(cost)
   
   print('Time Cost: {}'.format(str(cost)))

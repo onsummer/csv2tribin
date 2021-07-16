@@ -12,5 +12,6 @@ if __name__ == '__main__':
     None,
     False,
     '*.txt',
-    True
+    True,
+    None
   )
