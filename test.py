@@ -7,8 +7,8 @@ from csv2tribin import run
 if __name__ == '__main__':
 
   run(
-    r'C:\Users\CDCI\Desktop\pytest', 
-    r'C:\Users\CDCI\Desktop\1-FullDomain\coverage.shp',
+    r'D:\WorkingInDCI\01-Macao3D\stormdata\shanzhu', 
+    r'D:\WorkingInDCI\01-Macao3D\stormdata\shanzhu\masklayer.shp',
     None,
     '*.txt',
     True

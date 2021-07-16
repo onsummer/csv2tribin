@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import gzip, shutil, os, json, sys
+import gzip, shutil, os, json, sys, time
 
 def gz_compress(path):
   ''' 压缩一个文件。
@@ -36,14 +36,18 @@ def bin2gz(files):
   Args:
     files: 文件路径数组，用绝对路径
   '''
-  names = []
+  ticks = time.time()
+  namelist = {
+    generateTime: ticks,
+    names: []
+  }
   for bin_full_filename in files:
     gz_compress(bin_full_filename)
     dirname, basename = os.path.split(bin_full_filename)
     basename_withoutext = basename.replace('.bin', '')
-    names.append(basename_withoutext)
+    namelist.names.append(basename_withoutext)
     with open(os.path.join(dirname, 'namelist.json'), 'w') as json_handle:
-      json.dump(names, json_handle)
+      json.dump(namelist, json_handle)
 
 def get_toplevel_dir(root_dir):
   names = []
