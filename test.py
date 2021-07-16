@@ -10,6 +10,7 @@ if __name__ == '__main__':
     r'D:\WorkingInDCI\01-Macao3D\stormdata\shanzhu', 
     r'D:\WorkingInDCI\01-Macao3D\stormdata\shanzhu\masklayer.shp',
     None,
+    False,
     '*.txt',
     True
   )

@@ -9,7 +9,7 @@ def define_and_check_dir(fullname):
     os.makedirs(fullname)
   return fullname
 
-def run(csv_dir, coverage_layer_shppath, result_dir = None, csv_filter = '*.csv', open_onend = False):
+def run(csv_dir, coverage_layer_shppath, result_dir = None, is_clean_temp = True, csv_filter = '*.csv', open_onend = False, skip = None):
   ''' 程序主入口
 
   Args:
@@ -23,35 +23,51 @@ def run(csv_dir, coverage_layer_shppath, result_dir = None, csv_filter = '*.csv'
     return
   if result_dir == None:
     result_dir = csv_dir
+  if skip == None:
+    skip = []
 
   time_start = time.time()
 
-  csv_files = glob.glob(os.path.join(csv_dir, csv_filter))
-  pt_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'to_ptshp'))
-  parse_csv_to_pointshp(csv_files, pt_shp_resultdir)
+  if 1 not in skip:
+    csv_files = glob.glob(os.path.join(csv_dir, csv_filter))
+    pt_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'to_ptshp'))
+    parse_csv_to_pointshp(csv_files, pt_shp_resultdir)
   
-  pt_shps = glob.glob(os.path.join(pt_shp_resultdir, '*.shp'))
-  tin_resultdir = define_and_check_dir(os.path.join(result_dir, 'tins'))
-  pointshp_to_tin(pt_shps, tin_resultdir)
+  if 2 not in skip:
+    pt_shps = glob.glob(os.path.join(pt_shp_resultdir, '*.shp'))
+    tin_resultdir = define_and_check_dir(os.path.join(result_dir, 'tins'))
+    pointshp_to_tin(pt_shps, tin_resultdir)
 
-  tins = get_toplevel_dir(tin_resultdir)
-  triangle_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'triangles_shp'))
-  tin_to_triangle(tins, triangle_shp_resultdir)
+  if 3 not in skip:
+    tins = get_toplevel_dir(tin_resultdir)
+    triangle_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'triangles_shp'))
+    tin_to_triangle(tins, triangle_shp_resultdir)
 
-  triangle_shps = glob.glob(os.path.join(triangle_shp_resultdir, '*.shp'))
-  filtered_triangle_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'filtered_triangles'))
-  filter_triangle(triangle_shps, coverage_layer_shppath, filtered_triangle_shp_resultdir)
+  if 4 not in skip:
+    triangle_shps = glob.glob(os.path.join(triangle_shp_resultdir, '*.shp'))
+    filtered_triangle_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'filtered_triangles'))
+    filter_triangle(triangle_shps, coverage_layer_shppath, filtered_triangle_shp_resultdir)
 
-  filtered_triangle_shps = glob.glob(os.path.join(filtered_triangle_shp_resultdir, '*.shp'))
-  finally_resultdir = define_and_check_dir(os.path.join(result_dir, 'finally_result'))
-  geometry_to_binfile(filtered_triangle_shps, finally_resultdir, True)
+  if 5 not in skip:
+    filtered_triangle_shps = glob.glob(os.path.join(filtered_triangle_shp_resultdir, '*.shp'))
+    finally_resultdir = define_and_check_dir(os.path.join(result_dir, 'finally_result'))
+    geometry_to_binfile(filtered_triangle_shps, finally_resultdir, True)
 
-  print('Clean TempFiles ...')
+  if is_clean_temp:
+    print('Clean TempFiles ...')
+    delete_dir(pt_shp_resultdir, tin_resultdir, triangle_shp_resultdir, filtered_triangle_shp_resultdir)
 
-  delete_dir(pt_shp_resultdir, tin_resultdir, triangle_shp_resultdir, filtered_triangle_shp_resultdir)
   time_end=time.time()
 
   if open_onend:
     os.startfile(finally_resultdir)
 
-  print('Time Cost: {}s.'.format(str(time_end - time_start)))
+  cost = time_end - time_start
+  if cost > 60:
+    cost = "{}min.".format(cost / 60)
+  elif cost > 3600:
+    cost = "{}hour.".format(cost / 3600)
+  elif
+    cost = "{}sec.".format(cost)
+  
+  print('Time Cost: {}'.format(str(cost)))

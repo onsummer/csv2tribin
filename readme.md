@@ -37,6 +37,7 @@ ArcMap 内置的 arcpy
 - `csv_dir`: csv 数据文件路径，请使用绝对路径
 - `coverage_layer_shppath`: 覆盖图层 shp 文件绝对路径
 - `result_dir`?: 结果路径，使用绝对路径，若不指定则使用 csv_dir
+- `is_clean_temp`?: 布尔值，是否删除中间步骤文件，默认删除；有可能会被 arcpy 占用一部分文件，需要程序运行结束后手动删除
 - `csv_filter`?: csv 数据文件后缀名，默认 '*.csv'
 - `open_onend`?: 布尔值，指示运行结束后是否打开结果文件夹，默认不打开
 
@@ -46,7 +47,8 @@ from csv2tribin import run
 run(
   r'C:\Users\CDCI\Desktop\pytest', 
   r'C:\Users\CDCI\Desktop\1-FullDomain\coverage.shp', 
-  None, 
+  None,
+  False,
   '*.txt',
   True
 )
