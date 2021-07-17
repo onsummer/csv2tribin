@@ -38,14 +38,14 @@ def bin2gz(files):
   '''
   ticks = time.time()
   namelist = {
-    generateTime: ticks,
-    names: []
+    'generateTime': ticks,
+    'names': []
   }
   for bin_full_filename in files:
     gz_compress(bin_full_filename)
     dirname, basename = os.path.split(bin_full_filename)
     basename_withoutext = basename.replace('.bin', '')
-    namelist.names.append(basename_withoutext)
+    namelist['names'].append(basename_withoutext)
     with open(os.path.join(dirname, 'namelist.json'), 'w') as json_handle:
       json.dump(namelist, json_handle)
 

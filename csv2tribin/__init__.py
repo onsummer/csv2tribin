@@ -28,29 +28,34 @@ def run(csv_dir, coverage_layer_shppath, result_dir = None, is_clean_temp = True
 
   time_start = time.time()
 
+  csv_files = glob.glob(os.path.join(csv_dir, csv_filter))
+  pt_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'to_ptshp'))
+  
+  pt_shps = glob.glob(os.path.join(pt_shp_resultdir, '*.shp'))
+  tin_resultdir = define_and_check_dir(os.path.join(result_dir, 'tins'))
+
+  tins = get_toplevel_dir(tin_resultdir)
+  triangle_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'triangles_shp'))
+
+  triangle_shps = glob.glob(os.path.join(triangle_shp_resultdir, '*.shp'))
+  filtered_triangle_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'filtered_triangles'))
+
+  filtered_triangle_shps = glob.glob(os.path.join(filtered_triangle_shp_resultdir, '*.shp'))
+  finally_resultdir = define_and_check_dir(os.path.join(result_dir, 'finally_result'))
+  
   if 1 not in skip:
-    csv_files = glob.glob(os.path.join(csv_dir, csv_filter))
-    pt_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'to_ptshp'))
     parse_csv_to_pointshp(csv_files, pt_shp_resultdir)
   
   if 2 not in skip:
-    pt_shps = glob.glob(os.path.join(pt_shp_resultdir, '*.shp'))
-    tin_resultdir = define_and_check_dir(os.path.join(result_dir, 'tins'))
     pointshp_to_tin(pt_shps, tin_resultdir)
 
   if 3 not in skip:
-    tins = get_toplevel_dir(tin_resultdir)
-    triangle_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'triangles_shp'))
     tin_to_triangle(tins, triangle_shp_resultdir)
 
   if 4 not in skip:
-    triangle_shps = glob.glob(os.path.join(triangle_shp_resultdir, '*.shp'))
-    filtered_triangle_shp_resultdir = define_and_check_dir(os.path.join(result_dir, 'filtered_triangles'))
     filter_triangle(triangle_shps, coverage_layer_shppath, filtered_triangle_shp_resultdir)
 
   if 5 not in skip:
-    filtered_triangle_shps = glob.glob(os.path.join(filtered_triangle_shp_resultdir, '*.shp'))
-    finally_resultdir = define_and_check_dir(os.path.join(result_dir, 'finally_result'))
     geometry_to_binfile(filtered_triangle_shps, finally_resultdir, True)
 
   if is_clean_temp:
