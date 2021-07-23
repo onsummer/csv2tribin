@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @author: xuhuic
-# @time: 0717
+# @time: 0721
 
 from csv2tribin import run
 
@@ -12,6 +12,7 @@ if __name__ == '__main__':
     None,
     False,
     '*.txt',
+    True,
     True,
     [1, 2, 3, 4]
   )

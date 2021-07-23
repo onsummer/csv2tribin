@@ -137,20 +137,14 @@ def __write_shp_geometry_2bin(shp_filefullname, binfile_result_dir):
   bin_file_handle.flush()
   bin_file_handle.close()
 
-def geometry_to_binfile(shp_names, result_dir, is_compress):
+def geometry_to_binfile(shp_names, result_dir):
   ''' shp 中的几何数据转到二进制 VBO
 
   Args:
     shp_names: shp 文件路径，使用绝对路径
     result_dir: 输出二进制文件到什么地方，使用绝对路径
-    is_compress: 是否顺便使用 gzip 压缩
   '''
   length = str(len(shp_names))
   for index, shp_filefullname in enumerate(shp_names):
     print('TO_BIN: Progress {}/{}, {}'.format(str(index + 1), length, shp_filefullname))
     __write_shp_geometry_2bin(shp_filefullname, result_dir)
-
-  if is_compress:
-    binfiles = glob.glob(os.path.join(result_dir, '*.bin'))
-    bin2gz(binfiles)
-

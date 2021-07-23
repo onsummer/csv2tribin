@@ -35,10 +35,11 @@ def bin2gz(files):
 
   Args:
     files: 文件路径数组，用绝对路径
+    name: 项目名称
   '''
   ticks = time.time()
   namelist = {
-    'generateTime': ticks,
+    'createAt': ticks,
     'names': []
   }
   for bin_full_filename in files:

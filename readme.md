@@ -39,8 +39,9 @@ ArcMap 内置的 arcpy
 - `result_dir`?: 结果路径，使用绝对路径，若不指定则使用 csv_dir
 - `is_clean_temp`?: 布尔值，是否删除中间步骤文件，默认删除；有可能会被 arcpy 占用一部分文件，需要程序运行结束后手动删除
 - `csv_filter`?: csv 数据文件后缀名，默认 '*.csv'
+- `is_compress`?: 布尔值，指示是否压缩生成的二进制文件，默认 True
 - `open_onend`?: 布尔值，指示运行结束后是否打开结果文件夹，默认不打开
-- `skip`?: 数字 list，指示需要跳过计算的步骤，例如要跳过 1、2、3 步，只需传递 `[1, 2, 3]` 即可，默认不跳过，即 `None`；跳步请注意中间步骤所需数据的完整性、对应中间步骤的文件存在
+- `skip`?: 数字 list，指示要跳过哪些步骤，例如要跳过 1、2、3 步，只需传递 `[1, 2, 3]` 即可，默认 []，即不跳步；跳步请注意中间步骤所需数据的完整性、对应中间步骤的文件存在
 步骤1~5会在 `result_dir` 生成如下命名的文件夹：
   - 步骤1: `to_ptshp`
   - 步骤2: `tins`
@@ -52,12 +53,14 @@ ArcMap 内置的 arcpy
 from csv2tribin import run
 
 run(
-  r'C:\Users\CDCI\Desktop\pytest', 
-  r'C:\Users\CDCI\Desktop\1-FullDomain\coverage.shp', 
+  r'D:\WorkingInDCI\01-Macao3D\stormdata\shanzhu', 
+  r'D:\WorkingInDCI\01-Macao3D\stormdata\shanzhu\masklayer.shp',
   None,
   False,
   '*.txt',
-  True
+  True,
+  True,
+  [1, 2, 3, 4]
 )
 ```
 
@@ -224,7 +227,6 @@ shp 中的几何数据转到二进制 VBO
 
 - `shp_names`：字符串 list，每个元素是 shp 文件的绝对路径
 - `result_dir`：字符串，输出二进制文件到什么地方，使用绝对路径
-- `is_compress`：布尔值，是否顺便使用 gzip 压缩
 
 #### 举例
 
@@ -233,13 +235,12 @@ from csv2tribin.data_utils import *
 
 geometry_to_binfile(
   [r'D:\a01.shp', r'D:\a02.shp'],
-  r'D:\result',
-  True
+  r'D:\result'
 )
 ```
 
-会在 `D:\result` 中生成 `a01.bin`、`a02.bin`、`a01.txt`、`a02.txt`、`a01.bin.gz`、`a02.bin.gz` 和 `namelist.json` 文件。
-其中，`bin` 文件是提取出来的图形二进制数据，`txt` 是高度值的最大最小值统计数据，`bin.gz` 是 bin 文件 gzip 压缩后的文件。
+会在 `D:\result` 中生成 `a01.bin`、`a02.bin`、`a01.txt`、`a02.txt` 和 `namelist.json` 文件。
+其中，`bin` 文件是提取出来的图形二进制数据，`txt` 是高度值的最大最小值统计数据。
 
 # 5 测试情况
 

@@ -9,22 +9,31 @@ def define_and_check_dir(fullname):
     os.makedirs(fullname)
   return fullname
 
-def run(csv_dir, coverage_layer_shppath, result_dir = None, is_clean_temp = True, csv_filter = '*.csv', open_onend = False, skip = None):
+def run(
+  csv_dir, 
+  coverage_layer_shppath,
+  result_dir = None, 
+  is_clean_temp = True, 
+  csv_filter = '*.csv', 
+  is_compress = True,
+  open_onend = False, 
+  skip = []):
   ''' 程序主入口
 
   Args:
     csv_dir: csv 数据文件路径，请使用绝对路径
     coverage_layer_shppath: 覆盖图层 shp 文件绝对路径
     result_dir?: 结果路径，使用绝对路径，若不指定则使用 csv_dir
+    is_clean_temp?: 布尔值，指示是否清除临时数据，默认 True
     csv_filter?: csv 数据文件后缀名，默认 '*.csv'
+    is_compress?: 布尔值，指示是否压缩生成的二进制文件，默认 True
     open_onend?: 布尔值，指示运行结束后是否打开结果文件夹，默认不打开
+    skip?: list，指示要跳过哪些步骤，默认 []，即不跳步
   '''
   if os.path.isdir(csv_dir) == False:
     return
   if result_dir == None:
     result_dir = csv_dir
-  if skip == None:
-    skip = []
 
   time_start = time.time()
 
@@ -56,7 +65,10 @@ def run(csv_dir, coverage_layer_shppath, result_dir = None, is_clean_temp = True
     filter_triangle(triangle_shps, coverage_layer_shppath, filtered_triangle_shp_resultdir)
 
   if 5 not in skip:
-    geometry_to_binfile(filtered_triangle_shps, finally_resultdir, True)
+    geometry_to_binfile(filtered_triangle_shps, finally_resultdir)
+    if is_compress:
+      binfiles = glob.glob(os.path.join(finally_resultdir, '*.bin'))
+      bin2gz(binfiles)
 
   if is_clean_temp:
     print('Clean TempFiles ...')
